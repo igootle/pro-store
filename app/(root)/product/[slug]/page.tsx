@@ -6,6 +6,8 @@ import { notFound } from "next/navigation";
 import ProductPrice from "@/components/shared/product/product-price";
 import ProductImages from "@/components/shared/product/product-images";
 
+
+
 const ProductDetailsPage = async (props: {
   params: Promise<{ slug: string }>;
 }) => {
