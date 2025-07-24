@@ -96,7 +96,7 @@ export async function addItemToCart(data: CartItem) {
       await prisma.cart.update({
         where: { id: cart.id },
         data: {
-          items: cart.items as Prisma.CartUpdateitemsInput[],
+          items: cart.items,
           ...calcPrice(cart.items as CartItem[]),
         },
       });
@@ -119,8 +119,8 @@ export async function addItemToCart(data: CartItem) {
 
 export async function getMyCart() {
   // Check for cart cookie
-  const sessionCartId = (await cookies()).get("sessionCartId")?.value;
-  if (!sessionCartId) throw new Error("Cart session not found");
+  const sessionCartId = (await cookies()).get('sessionCartId')?.value;
+  if (!sessionCartId) throw new Error('Cart session not found');
 
   // Get session and user ID
   const session = await auth();
@@ -130,6 +130,7 @@ export async function getMyCart() {
   const cart = await prisma.cart.findFirst({
     where: userId ? { userId: userId } : { sessionCartId: sessionCartId },
   });
+
   if (!cart) return undefined;
 
   // Convert decimals and return
@@ -145,7 +146,6 @@ export async function getMyCart() {
 
 export async function removeItemFromCart(productId: string) {
   try {
-    
     // Check for cart cookie
     const sessionCartId = (await cookies()).get("sessionCartId")?.value;
     if (!sessionCartId) throw new Error("Cart session not found");
@@ -179,20 +179,19 @@ export async function removeItemFromCart(productId: string) {
 
     // Update cart in database
     await prisma.cart.update({
-      where: {id: cart.id},
+      where: { id: cart.id },
       data: {
-        items: cart.items as Prisma.CartUpdateitemsInput[],
+        items: cart.items,
         ...calcPrice(cart.items as CartItem[]),
-      }
-    })
+      },
+    });
 
     revalidatePath(`/product/${product.slug}`);
 
     return {
       success: true,
-      message :`${product.name} was removed from cart`
-    }
-
+      message: `${product.name} was removed from cart`,
+    };
   } catch (error) {
     return { success: false, message: formatError(error) };
   }

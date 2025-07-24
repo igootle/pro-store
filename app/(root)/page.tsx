@@ -1,12 +1,23 @@
 import ProductList from "@/components/shared/product/product-list";
-import { getLatestProducts } from "@/lib/actions/product.actions";
+import {
+  getLatestProducts,
+  getFeaturedProducts,
+} from "@/lib/actions/product.actions";
 // import sampleData from "@/db/sample-data";
+import ProductCarousel from "@/components/shared/product/product-carousel";
+import ViewAllProductsButton from "@/components/view-all-products-button";
 
 const Homepage = async () => {
-  const latestProducts  = await getLatestProducts();
+  const latestProducts = await getLatestProducts();
+  const featuredProducts = await getFeaturedProducts();
+
   return (
     <>
-      <ProductList data={latestProducts} title="Newest Arrivals" limit={4}/>
+      {featuredProducts.length > 0 && (
+        <ProductCarousel data={featuredProducts} />
+      )}
+      <ProductList data={latestProducts} title="Newest Arrivals" limit={4} />
+      <ViewAllProductsButton />
     </>
   );
 };
