@@ -260,7 +260,7 @@ export async function updateOrderToPaid({
     order: {
       ...updatedOrder,
       shippingAddress: updatedOrder.shippingAddress as ShippingAddress,
-      paymentResult: updatedOrder.paymentResult as PaymentResult,
+      paymentResult: updatedOrder.paymentResult as PaymentResult
       
     }
   })
